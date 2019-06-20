@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShortURL.Model;
 
 namespace ShortURL
 {
@@ -22,6 +23,8 @@ namespace ShortURL
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            services.AddDbContext<UrlContext>(options => options.UseMySql(connectionString));
             services.AddMvc();
         }
 
@@ -47,8 +50,17 @@ namespace ShortURL
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "Default",
+                    template: "{url}",
+                    defaults: new { controller = "Link", action = "Index" },
+                    // ограничение на адрес - начинается с цифры
+                    new { controller = "Link", url = @"^\d+\w+" }
+                );
+
+                routes.MapRoute(
+                    name: "defaultApi",
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
 
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",

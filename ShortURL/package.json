@@ -15,6 +15,7 @@
     "awesome-typescript-loader": "3.2.1",
     "bootstrap": "3.3.7",
     "css-loader": "0.28.4",
+    "es6-promise": "^4.2.8",
     "event-source-polyfill": "0.0.9",
     "extract-text-webpack-plugin": "2.1.2",
     "file-loader": "0.11.2",
@@ -30,5 +31,9 @@
     "url-loader": "0.5.9",
     "webpack": "2.5.1",
     "webpack-hot-middleware": "2.18.2"
+  },
+  "dependencies": {
+    "sourcemapped-stacktrace": "^1.1.9",
+    "whatwg-fetch": "^3.0.0"
   }
 }
